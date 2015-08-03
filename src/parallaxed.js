@@ -51,7 +51,7 @@
                 // Check if we should be moving
                 if (start == 'visible') {
                     if ($item.position().top > offset + $window.height()
-                        || $item.position().top + $item.outerHeight() < offset) {
+                        || startTop + $item.outerHeight() < offset) {
                         return;
                     }
 
@@ -69,7 +69,12 @@
                     parallaxOffset = (offset - startOffset) * speed;
                 }
 
-                $item.css('top', (startCssTop - parallaxOffset) + "px");
+                if (getDataDefault($item, 'usetransform')) {
+                    $item.css('transform', 'translate(0px, '+ (-parallaxOffset) +'px)')
+                }
+                else {
+                    $item.css('top', (startCssTop - parallaxOffset) + "px");
+                }
             });
         });
 
@@ -77,6 +82,7 @@
     }
 
     $.fn[namespace].defaults = {
+        usetransform: true,
         speed: 1,
         start: 'visible',
         startoffset: 0
