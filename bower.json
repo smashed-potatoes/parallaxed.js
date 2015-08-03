@@ -1,0 +1,27 @@
+{
+    "name": "parallaxed.js",
+    "description": "A basic parallax plugin",
+    "version": "0.1",
+
+    "authors": {
+        "name": "Jon Melnik",
+        "homepage": "http://jonmelnik.com"
+    },
+
+    "ignore": [
+        "*.md"
+    ],
+
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:smashed-potatoes/parallaxed.js.git"
+    },
+
+    "main": [
+        "src/parallaxed.js"
+    ],
+
+    "dependencies": {
+        "jquery": ">=1.11.3"
+    }
+}
