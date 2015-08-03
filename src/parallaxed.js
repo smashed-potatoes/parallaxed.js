@@ -22,13 +22,14 @@
 
         // Store the initial positions of the items
         var startPositions = {};
+        var startCssPositions = {};
         $items.each(function (index, item) {
             var $item = $(item);
-            var position = $item.position();
-            // First use CSS, fallback to jQuery position
-            startPositions[item.id] = {
-                top: $item.css('top') ? parseInt($item.css('top'), 10) : position.top,
-                left: $item.css('left') ? parseInt($item.css('left'), 10) : position.left
+            // Track both actual and css positions
+            startPositions[item.id] = $item.position();
+            startCssPositions[item.id] = {
+                top: $item.css('top') ? parseInt($item.css('top'), 10) : 0,
+                left: $item.css('left') ? parseInt($item.css('left'), 10) : 0
             };
         });
 
@@ -44,6 +45,7 @@
                 var speed = getDataDefault($item, 'speed');
 
                 var startTop = startPositions[item.id].top;
+                var startCssTop = startCssPositions[item.id].top;
                 var parallaxOffset = offset * speed;
 
                 // Check if we should be moving
@@ -67,7 +69,7 @@
                     parallaxOffset = (offset - startOffset) * speed;
                 }
 
-                $item.css('top', (startTop - parallaxOffset) + "px");
+                $item.css('top', (startCssTop - parallaxOffset) + "px");
             });
         });
 
