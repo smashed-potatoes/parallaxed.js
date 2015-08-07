@@ -36,7 +36,8 @@
         // Handle scrolling
         var $window = $(window);
         $window.on('scroll', function(){
-            var offset = $window.scrollTop();
+            var offsetTop = $window.scrollTop();
+            var offsetLeft = $window.scrollLeft();
 
             $items.each(function (index, item){
                 var $item = $(item);
@@ -46,46 +47,59 @@
 
                 var startTop = startPositions[item.id].top;
                 var startCssTop = startCssPositions[item.id].top;
-                var parallaxOffset = offset * speed;
+                var startLeft = startPositions[item.id].left;
+                var startCssLeft = startCssPositions[item.id].left;
+
+                var parallaxOffsetTop = offsetTop * speed;
+                var parallaxOffsetLeft = offsetLeft * speed;
 
                 // Check if we should be moving
                 if (start == 'visible') {
-                    if ($item.position().top > offset + $window.height()
-                        || startTop + $item.outerHeight() < offset) {
+                    if ($item.position().top > offsetTop + $window.height()
+                        || startTop + $item.outerHeight() < offsetTop
+                        || $item.position().left > offsetLeft + $window.width()
+                        || startLeft + $item.outerWidth() < offsetLeft) {
                         return;
                     }
 
                     // Have to adjust offset based on how much had to be scrolled to see the item
-                    var scrollToSee = (startTop > $window.height()) ? startTop - $window.height() : 0;
-                    parallaxOffset = (offset - scrollToSee) * speed;
+                    var scrollToSeeTop = (startTop > $window.height()) ? startTop - $window.height() : 0;
+                    parallaxOffsetTop = (offsetTop - scrollToSeeTop) * speed;
+
+                    var scrollToSeeLeft = (startLeft > $window.width()) ? startLeft - $window.width() : 0;
+                    parallaxOffsetLeft = (offsetLeft - scrollToSeeLeft) * speed;
                 }
                 else if (start == 'offset') {
-                    var startOffset = getDataDefault($item, 'startoffset');
-                    if (offset < startOffset) {
+                    var startOffsetTop = getDataDefault($item, 'startoffsettop');
+                    var startOffsetLeft = getDataDefault($item, 'startoffsetleft');
+                    if (offsetTop < startOffsetTop || offsetLeft < startOffsetLeft) {
                         return;
                     }
 
                     // Adjust offset based on start offset
-                    parallaxOffset = (offset - startOffset) * speed;
+                    parallaxOffsetTop = (offsetTop - startOffsetTop) * speed;
+                    parallaxOffsetLeft = (offsetLeft - startOffsetLeft) * speed;
                 }
 
                 if (getDataDefault($item, 'usetransform')) {
-                    $item.css('transform', 'translate(0px, '+ (-parallaxOffset) +'px)')
+                    $item.css('transform', 'translate('+ (-parallaxOffsetLeft) +'px, '+ (-parallaxOffsetTop) +'px)');
                 }
                 else {
-                    $item.css('top', (startCssTop - parallaxOffset) + "px");
+                    $item.css('top', (startCssTop - parallaxOffsetTop) + "px");
+                    $item.css('left', (startCssLeft - parallaxOffsetLeft) + "px");
                 }
             });
         });
 
         return this;
-    }
+    };
 
     $.fn[namespace].defaults = {
         usetransform: true,
         speed: 1,
         start: 'visible',
-        startoffset: 0
+        startoffsettop: 0,
+        startoffsetleft: 0
     };
 
 })(jQuery);

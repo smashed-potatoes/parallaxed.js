@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>parallaxed.js</title>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="src/parallaxed.js"></script>
+
+        <script type="text/javascript">
+            $(function() {
+                $body = $('body');
+
+                // Generate some divs
+                for (var i=0; i<200; i++) {
+
+                    // Random speed
+                    var speed = Math.random() * 1.5;
+
+                    // Random position and size
+                    var left = parseInt(Math.random() * $('body').width() * 2 + 1);
+                    var top = parseInt(Math.random() * $(window).height() * 10 + 1);
+                    var size = parseInt(Math.random() * (200*speed) + 50);
+
+                    // Random color
+                    var r = parseInt(Math.random() * 255).toString(16);
+                    var g = parseInt(Math.random() * 255).toString(16);
+                    var b = parseInt(Math.random() * 255).toString(16);
+
+                    var div = $('<div style="position:absolute">');
+                    div.css('width', size + 'px');
+                    div.css('height', size + 'px');
+                    div.css('left', left + 'px');
+                    div.css('top', top + 'px');
+                    div.css('z-index', parseInt(speed*100));
+
+                    div.css('background-color', '#' + r + g + b);
+                    div.data('parallaxed-speed', speed);
+
+                    $body.append(div);
+                    div.parallaxed();
+                }
+            })
+        </script>
+
+        <style type="text/css">
+            body {
+                background-color: #111;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
